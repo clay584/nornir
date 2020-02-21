@@ -104,6 +104,7 @@ class NBInventory(Inventory):
         # Pass the data back to the parent class
         super().__init__(hosts=hosts, groups={}, defaults={}, **kwargs)
 
+
 class NetboxInventory2(Inventory):
     """
     Inventory plugin that uses `Netbox <https://github.com/netbox-community/netbox>`_ as backend.
@@ -150,10 +151,10 @@ class NetboxInventory2(Inventory):
         # Load in user private key from environment var or file load
         nb_private_key = nb_private_key or os.environ.get("NB_PRIVATE_KEY", None)
 
-        if os.environ.get('NB_PRIVATE_KEY') is not None:
-            nb_private_key = os.environ.get('NB_PRIVATE_KEY')
-        elif os.environ.get('NB_PRIVATE_KEY') is None and nb_private_key:
-            with open(nb_private_key, 'r') as f:
+        if os.environ.get("NB_PRIVATE_KEY") is not None:
+            nb_private_key = os.environ.get("NB_PRIVATE_KEY")
+        elif os.environ.get("NB_PRIVATE_KEY") is None and nb_private_key:
+            with open(nb_private_key, "r") as f:
                 nb_private_key = f.read()
 
         session = requests.Session()
@@ -169,27 +170,28 @@ class NetboxInventory2(Inventory):
             nb_session_key: str = None
 
             headers = {
-                'Connection': 'keep-alive',
-                'Accept': 'application/json, text/javascript, */*; q=0.01',
-                'DNT': '1',
-                'X-Requested-With': 'XMLHttpRequest',
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                'Accept-Encoding': 'gzip, deflate',
-                'Accept-Language': 'en-US,en;q=0.9',
+                "Connection": "keep-alive",
+                "Accept": "application/json, text/javascript, */*; q=0.01",
+                "DNT": "1",
+                "X-Requested-With": "XMLHttpRequest",
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                "Accept-Encoding": "gzip, deflate",
+                "Accept-Language": "en-US,en;q=0.9",
             }
 
-            payload = {
-                "private_key": nb_private_key
-            }
+            payload = {"private_key": nb_private_key}
             r = session.post(url, headers=headers, data=payload)
 
             if not r.status_code == 200:
-                raise ValueError(f"Failed to get session key from Netbox instance {nb_url}")
+                raise ValueError(
+                    f"Failed to get session key from Netbox instance {nb_url}"
+                )
 
             # Add session key to cookie jar for session
             session_key_cookie = r.json()
-            session.cookies.set(name="session_key", value=session_key_cookie.get("session_key"))
-
+            session.cookies.set(
+                name="session_key", value=session_key_cookie.get("session_key")
+            )
 
             # Get all secrets
 
@@ -200,7 +202,9 @@ class NetboxInventory2(Inventory):
                 r = session.get(url)
 
                 if not r.status_code == 200:
-                    raise ValueError(f"Failed to get secrets from Netbox instance {nb_url}")
+                    raise ValueError(
+                        f"Failed to get secrets from Netbox instance {nb_url}"
+                    )
 
                 resp = r.json()
                 nb_secrets.extend(resp.get("results"))
@@ -246,9 +250,15 @@ class NetboxInventory2(Inventory):
             # Add secrets to host if it has one in Netbox
             if nb_private_key:
                 # Filter secrets based on netbox secret role slug
-                f_secrets = [s for s in nb_secrets if s.get("role").get("slug") == nb_cred_role_slug]
+                f_secrets = [
+                    s
+                    for s in nb_secrets
+                    if s.get("role").get("slug") == nb_cred_role_slug
+                ]
                 # Add secrets to device if they exist
-                host_secret = [s for s in f_secrets if s.get("device").get("id") == dev.get("id")]
+                host_secret = [
+                    s for s in f_secrets if s.get("device").get("id") == dev.get("id")
+                ]
                 if host_secret:
                     host_secret = host_secret[0]
                     host["username"] = host_secret.get("name")
@@ -256,7 +266,9 @@ class NetboxInventory2(Inventory):
 
             # management port from netbox config_context if it's available
             if host.get("data").get("config_context").get("nornir").get("port"):
-                host["port"] = host.get("data").get("config_context").get("nornir").get("port")
+                host["port"] = (
+                    host.get("data").get("config_context").get("nornir").get("port")
+                )
 
             # Attempt to add 'platform' based of value in 'slug'
             host["platform"] = dev["platform"]["slug"] if dev["platform"] else None
