@@ -1,3 +1,4 @@
+import logging
 import os
 import warnings
 from typing import Any, Dict, List, Optional, Union
@@ -5,6 +6,9 @@ from typing import Any, Dict, List, Optional, Union
 from nornir.core.deserializer.inventory import Inventory, HostsDict
 
 import requests
+import ruamel.yaml
+
+logger = logging.getLogger(__name__)
 
 
 class NBInventory(Inventory):
@@ -104,6 +108,7 @@ class NBInventory(Inventory):
         # Pass the data back to the parent class
         super().__init__(hosts=hosts, groups={}, defaults={}, **kwargs)
 
+
 class NetboxInventory2(Inventory):
     """
     Inventory plugin that uses `Netbox <https://github.com/netbox-community/netbox>`_ as backend.
@@ -125,7 +130,8 @@ class NetboxInventory2(Inventory):
         flatten_custom_fields: Assign custom fields directly to the host's data attribute
             (defaults to False)
         filter_parameters: Key-value pairs that allow you to filter the Netbox inventory.
-        nb_private_key: Netbox user private key file path
+        nb_private_key: Netbox user private key file path to load from disk. No need to include this parameter if your
+            private key is set with the environment variable NB_PRIVATE_KEY.
         nb_cred_role: Netbox secret role name for which type of credentials to pull in.
     """
 
@@ -138,8 +144,22 @@ class NetboxInventory2(Inventory):
         filter_parameters: Optional[Dict[str, Any]] = None,
         nb_private_key: Optional[str] = None,
         nb_cred_role: Optional[str] = None,
+        defaults_file: str = "defaults.yaml",
         **kwargs: Any,
     ) -> None:
+
+        # Load in defaults if provided
+        defaults = {}
+        if defaults_file:
+            yml = ruamel.yaml.YAML(typ="safe")
+            defaults_file = os.path.expanduser(defaults_file)
+            if os.path.exists(defaults_file):
+                with open(defaults_file, "r") as f:
+                    defaults = yml.load(f) or {}
+            else:
+                logger.debug("File %r was not found", defaults_file)
+                defaults = {}
+
         filter_parameters = filter_parameters or {}
         nb_url = nb_url or os.environ.get("NB_URL", "http://localhost:8080")
         nb_token = nb_token or os.environ.get(
@@ -182,13 +202,13 @@ class NetboxInventory2(Inventory):
             # Get all secrets
 
             url = f"{nb_url}/api/secrets/secrets/?limit=0"
-            nb_secrets = self._get_paginated(nb_url, session)
+            nb_secrets = self._get_paginated(url, session)
 
         # Fetch all devices from Netbox
         # Since the api uses pagination we have to fetch until no next is provided
 
         url = f"{nb_url}/api/dcim/devices/?limit=0"
-        nb_devices = self._get_paginated(nb_url, session)
+        nb_devices = self._get_paginated(url, session)
 
         hosts = {}
         for dev in nb_devices:
@@ -235,9 +255,12 @@ class NetboxInventory2(Inventory):
             # If a device is unnamed we will set the name to the id of the device in netbox
             hosts[dev.get("name") or dev.get("id")] = host
 
+            # Pass the data back to the parent class
+            super().__init__(hosts=hosts, groups={}, defaults=defaults, **kwargs)
+
     @classmethod
-    def _get_paginated(cls, nb_url, session):
-        url = f"{nb_url}/api/secrets/secrets/?limit=0"
+    def _get_paginated(cls, url, session):
+        url = f"{url}"
         items: List[Dict[str, Any]] = []
 
         while url:
@@ -246,15 +269,15 @@ class NetboxInventory2(Inventory):
             if not r.status_code == 200:
                 if "secrets" in url:
                     raise ValueError(
-                        f"Failed to get secrets from Netbox instance {nb_url}"
+                        f"Failed to get secrets from Netbox instance {url}"
                     )
                 elif "devices" in url:
                     raise ValueError(
-                        f"Failed to get devices from Netbox instance {nb_url}"
+                        f"Failed to get devices from Netbox instance {url}"
                     )
                 else:
                     raise ValueError(
-                        f"Failed to get data from Netbox instance {nb_url}"
+                        f"Failed to get data from Netbox instance {url}"
                     )
 
             resp = r.json()
@@ -263,7 +286,3 @@ class NetboxInventory2(Inventory):
             url = resp.get("next")
 
         return items
-
-        # Pass the data back to the parent class
-        super().__init__(hosts=hosts, groups={}, defaults={}, **kwargs)
-
