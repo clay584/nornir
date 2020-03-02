@@ -231,7 +231,7 @@ class NetboxInventory2(Inventory):
 
             # Add secrets to host if it has one in Netbox
             if nb_private_key:
-                # Filter secrets based on netbox secret role slug
+                # Filter secrets based on netbox secret role slug and assign to host username/password
                 f_secrets = [
                     s for s in nb_secrets if s.get("role").get("name") == nb_cred_role
                 ]
@@ -244,11 +244,11 @@ class NetboxInventory2(Inventory):
                     host["username"] = host_secret.get("name")
                     host["password"] = host_secret.get("plaintext")
 
-            # management port from netbox config_context if it's available
-            if host.get("data").get("config_context").get("nornir").get("port"):
-                host["port"] = (
-                    host.get("data").get("config_context").get("nornir").get("port")
-                )
+                # Add all host secrets to the nornir host data
+                all_host_secrets = [
+                    s for s in nb_secrets if s.get("device").get("name") == dev.get("name")
+                ]
+                host["data"]["nb_secrets"] = all_host_secrets
 
             # Assign temporary dict to outer dict
             # Netbox allows devices to be unnamed, but the Nornir model does not allow this
