@@ -1,0 +1,218 @@
+{
+    "count": 5,
+    "next": null,
+    "previous": "http://localhost:8080/api/dcim/devices/?limit=3",
+    "results": [
+        {
+            "id": 6,
+            "name": "FIOS-ONT",
+            "display_name": "FIOS-ONT",
+            "device_type": {
+                "id": 5,
+                "url": "http://localhost:8080/api/dcim/device-types/5/",
+                "manufacturer": {
+                    "id": 4,
+                    "url": "http://localhost:8080/api/dcim/manufacturers/4/",
+                    "name": "Whitebox",
+                    "slug": "whitebox"
+                },
+                "model": "FIOS-ONT",
+                "slug": "fios-ont",
+                "display_name": "Whitebox FIOS-ONT"
+            },
+            "device_role": {
+                "id": 4,
+                "url": "http://localhost:8080/api/dcim/device-roles/4/",
+                "name": "Modem",
+                "slug": "modem"
+            },
+            "tenant": null,
+            "platform": null,
+            "serial": "",
+            "asset_tag": null,
+            "site": {
+                "id": 1,
+                "url": "http://localhost:8080/api/dcim/sites/1/",
+                "name": "Home",
+                "slug": "home"
+            },
+            "rack": null,
+            "position": null,
+            "face": null,
+            "parent_device": null,
+            "status": {
+                "value": "active",
+                "label": "Active",
+                "id": 1
+            },
+            "primary_ip": null,
+            "primary_ip4": null,
+            "primary_ip6": null,
+            "cluster": null,
+            "virtual_chassis": null,
+            "vc_position": null,
+            "vc_priority": null,
+            "comments": "",
+            "local_context_data": null,
+            "tags": [],
+            "custom_fields": {},
+            "config_context": {
+                "nornir": {
+                    "port": 22
+                }
+            },
+            "created": "2020-02-19",
+            "last_updated": "2020-02-19T03:09:56.622169Z"
+        },
+        {
+            "id": 5,
+            "name": "edgerouter-x",
+            "display_name": "edgerouter-x",
+            "device_type": {
+                "id": 4,
+                "url": "http://localhost:8080/api/dcim/device-types/4/",
+                "manufacturer": {
+                    "id": 5,
+                    "url": "http://localhost:8080/api/dcim/manufacturers/5/",
+                    "name": "Ubiquiti",
+                    "slug": "ubiquiti"
+                },
+                "model": "EdgeRouter-X",
+                "slug": "edgerouter-x",
+                "display_name": "Ubiquiti EdgeRouter-X"
+            },
+            "device_role": {
+                "id": 1,
+                "url": "http://localhost:8080/api/dcim/device-roles/1/",
+                "name": "Router",
+                "slug": "router"
+            },
+            "tenant": {
+                "id": 1,
+                "url": "http://localhost:8080/api/tenancy/tenants/1/",
+                "name": "Curtis",
+                "slug": "curtis"
+            },
+            "platform": null,
+            "serial": "78:8A:20:0E:62:E8",
+            "asset_tag": null,
+            "site": {
+                "id": 1,
+                "url": "http://localhost:8080/api/dcim/sites/1/",
+                "name": "Home",
+                "slug": "home"
+            },
+            "rack": {
+                "id": 1,
+                "url": "http://localhost:8080/api/dcim/racks/1/",
+                "name": "Attic",
+                "display_name": "Attic"
+            },
+            "position": 9,
+            "face": {
+                "value": "front",
+                "label": "Front",
+                "id": 0
+            },
+            "parent_device": null,
+            "status": {
+                "value": "active",
+                "label": "Active",
+                "id": 1
+            },
+            "primary_ip": null,
+            "primary_ip4": null,
+            "primary_ip6": null,
+            "cluster": null,
+            "virtual_chassis": null,
+            "vc_position": null,
+            "vc_priority": null,
+            "comments": "",
+            "local_context_data": null,
+            "tags": [],
+            "custom_fields": {},
+            "config_context": {
+                "nornir": {
+                    "port": 22
+                }
+            },
+            "created": "2020-02-19",
+            "last_updated": "2020-02-19T03:06:27.268157Z"
+        },
+        {
+            "id": 4,
+            "name": "pa-fw",
+            "display_name": "pa-fw",
+            "device_type": {
+                "id": 3,
+                "url": "http://localhost:8080/api/dcim/device-types/3/",
+                "manufacturer": {
+                    "id": 2,
+                    "url": "http://localhost:8080/api/dcim/manufacturers/2/",
+                    "name": "Palo Alto",
+                    "slug": "palo-alto"
+                },
+                "model": "PA-220",
+                "slug": "pa-220",
+                "display_name": "Palo Alto PA-220"
+            },
+            "device_role": {
+                "id": 3,
+                "url": "http://localhost:8080/api/dcim/device-roles/3/",
+                "name": "Firewall",
+                "slug": "firewall"
+            },
+            "tenant": {
+                "id": 1,
+                "url": "http://localhost:8080/api/tenancy/tenants/1/",
+                "name": "Curtis",
+                "slug": "curtis"
+            },
+            "platform": null,
+            "serial": "012801005638",
+            "asset_tag": null,
+            "site": {
+                "id": 1,
+                "url": "http://localhost:8080/api/dcim/sites/1/",
+                "name": "Home",
+                "slug": "home"
+            },
+            "rack": {
+                "id": 1,
+                "url": "http://localhost:8080/api/dcim/racks/1/",
+                "name": "Attic",
+                "display_name": "Attic"
+            },
+            "position": 8,
+            "face": {
+                "value": "front",
+                "label": "Front",
+                "id": 0
+            },
+            "parent_device": null,
+            "status": {
+                "value": "active",
+                "label": "Active",
+                "id": 1
+            },
+            "primary_ip": null,
+            "primary_ip4": null,
+            "primary_ip6": null,
+            "cluster": null,
+            "virtual_chassis": null,
+            "vc_position": null,
+            "vc_priority": null,
+            "comments": "",
+            "local_context_data": null,
+            "tags": [],
+            "custom_fields": {},
+            "config_context": {
+                "nornir": {
+                    "port": 22
+                }
+            },
+            "created": "2020-02-19",
+            "last_updated": "2020-02-19T02:57:53.003937Z"
+        }
+    ]
+}

@@ -77,9 +77,44 @@ class TestNBInventory(object):
 
 class TestNetboxInventory2(TestNBInventory):
     plugin = NetboxInventory2
-    nb_version = "2.3.5"
+    nb_version = "2.7.6"
+
+    def test_inventory(self, requests_mock):
+        inv = get_inv(requests_mock, self.nb_version, self.plugin, False)
+        with open(
+            f"{BASE_PATH}/{self.nb_version}/{self.plugin.__name__}/expected.json", "r"
+        ) as f:
+            expected = json.load(f)
+        assert expected == Inventory.serialize(inv).dict()
+
+    def test_inventory_pagination(self, requests_mock):
+        inv = get_inv(requests_mock, self.nb_version, self.plugin, False)
+        with open(
+            f"{BASE_PATH}/{self.nb_version}/{self.plugin.__name__}/expected.json", "r"
+        ) as f:
+            expected = json.load(f)
+        assert expected == Inventory.serialize(inv).dict()
+
+    def test_inventory_transform_function(self, requests_mock):
+        inv = get_inv(
+            requests_mock,
+            self.nb_version,
+            self.plugin,
+            False,
+            transform_function=self.transform_function,
+        )
+        with open(
+            (
+                f"{BASE_PATH}/{self.nb_version}/{self.plugin.__name__}/"
+                "expected_transform_function.json"
+            ),
+            "r",
+        ) as f:
+            expected = json.load(f)
+        assert expected == Inventory.serialize(inv).dict()
 
     @staticmethod
     def transform_function(host):
-        vendor_map = {"Cisco": "ios", "Juniper": "junos"}
-        host.platform = vendor_map[host["device_type"]["manufacturer"]["name"]]
+        vendor_map = {"Cisco": "ios"}
+        if host["device_type"]["manufacturer"]["name"] == "Cisco":
+            host.platform = vendor_map[host["device_type"]["manufacturer"]["name"]]

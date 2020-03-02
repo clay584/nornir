@@ -1,0 +1,97 @@
+{
+    "count": 5,
+    "next": "http://localhost:8080/api/dcim/devices/?limit=1&offset=1",
+    "previous": null,
+    "results": [
+        {
+            "id": 2,
+            "name": "CCMP-RTR01",
+            "display_name": "CCMP-RTR01",
+            "device_type": {
+                "id": 1,
+                "url": "http://localhost:8080/api/dcim/device-types/1/",
+                "manufacturer": {
+                    "id": 1,
+                    "url": "http://localhost:8080/api/dcim/manufacturers/1/",
+                    "name": "Cisco",
+                    "slug": "cisco"
+                },
+                "model": "C1111-8PWB",
+                "slug": "c1111-8pwb",
+                "display_name": "Cisco C1111-8PWB"
+            },
+            "device_role": {
+                "id": 1,
+                "url": "http://localhost:8080/api/dcim/device-roles/1/",
+                "name": "Router",
+                "slug": "router"
+            },
+            "tenant": {
+                "id": 1,
+                "url": "http://localhost:8080/api/tenancy/tenants/1/",
+                "name": "Curtis",
+                "slug": "curtis"
+            },
+            "platform": {
+                "id": 1,
+                "url": "http://localhost:8080/api/dcim/platforms/1/",
+                "name": "ios",
+                "slug": "ios"
+            },
+            "serial": "FGL232921Y2",
+            "asset_tag": null,
+            "site": {
+                "id": 1,
+                "url": "http://localhost:8080/api/dcim/sites/1/",
+                "name": "Home",
+                "slug": "home"
+            },
+            "rack": {
+                "id": 1,
+                "url": "http://localhost:8080/api/dcim/racks/1/",
+                "name": "Attic",
+                "display_name": "Attic"
+            },
+            "position": 6,
+            "face": {
+                "value": "front",
+                "label": "Front",
+                "id": 0
+            },
+            "parent_device": null,
+            "status": {
+                "value": "staged",
+                "label": "Staged",
+                "id": 3
+            },
+            "primary_ip": {
+                "id": 4,
+                "url": "http://localhost:8080/api/ipam/ip-addresses/4/",
+                "family": 4,
+                "address": "192.168.255.11/24"
+            },
+            "primary_ip4": {
+                "id": 4,
+                "url": "http://localhost:8080/api/ipam/ip-addresses/4/",
+                "family": 4,
+                "address": "192.168.255.11/24"
+            },
+            "primary_ip6": null,
+            "cluster": null,
+            "virtual_chassis": null,
+            "vc_position": null,
+            "vc_priority": null,
+            "comments": "",
+            "local_context_data": null,
+            "tags": [],
+            "custom_fields": {},
+            "config_context": {
+                "nornir": {
+                    "port": 22
+                }
+            },
+            "created": "2020-02-18",
+            "last_updated": "2020-02-21T14:25:13.221609Z"
+        }
+    ]
+}
